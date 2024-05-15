@@ -92,6 +92,7 @@ async function run() {
       const gallery = await galleryCollection.insertOne(cursor);
       res.send(gallery);
     });
+    // logout
     app.post("/logout", async (req, res) => {
       const user = req.body;
       console.log(user);
