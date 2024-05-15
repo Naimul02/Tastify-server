@@ -221,6 +221,7 @@ async function run() {
       const result = await allFoodsCollection.updateOne(filter, updateDoc);
       res.send(result);
     });
+    // my added put
     app.put("/myAddedPut/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
