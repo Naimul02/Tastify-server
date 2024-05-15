@@ -92,9 +92,12 @@ async function run() {
       const gallery = await galleryCollection.insertOne(cursor);
       res.send(gallery);
     });
-    app.post("logout", async (req, res) => {
-      const user = reeq.body;
-      res.clearCookie("token", { maxAge: 0 }).send({ success: true });
+    app.post("/logout", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      res
+        .clearCookie("token", { ...cookieOption, maxAge: 0 })
+        .send({ success: true });
     });
     app.get("/singleFood/:id", async (req, res) => {
       const id = req.params.id;
