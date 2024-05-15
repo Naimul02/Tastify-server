@@ -48,11 +48,11 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-const cookieOption =  {
+const cookieOption = {
   httpOnly: true,
   sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
   secure: process.env.NODE_ENV === "production" ? true : false,
-}
+};
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
@@ -91,6 +91,10 @@ async function run() {
       const cursor = req.body;
       const gallery = await galleryCollection.insertOne(cursor);
       res.send(gallery);
+    });
+    app.post("logout", async (req, res) => {
+      const user = reeq.body;
+      res.clearCookie("token", { maxAge: 0 }).send({ success: true });
     });
     app.get("/singleFood/:id", async (req, res) => {
       const id = req.params.id;
@@ -183,9 +187,7 @@ async function run() {
       const token = jwt.sign(user, process.env.ACCESS_SECRET_TOKEN, {
         expiresIn: "1hr",
       });
-      res
-        .cookie("token", token, cookieOption)
-        .send({ success: true });
+      res.cookie("token", token, cookieOption).send({ success: true });
     });
 
     app.patch("/updateQuantity", async (req, res) => {
