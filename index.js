@@ -69,11 +69,11 @@ async function run() {
     const addFoodCollection = client.db("assignment-11").collection("addFood");
     const galleryCollection = client.db("assignment-11").collection("gallery");
 
-    app.get("/foods", async (req, res) => {
-      const foods = foodsCollection.find();
-      const result = await foods.toArray();
-      res.send(result);
-    });
+    // app.get("/foods", async (req, res) => {
+    //   const foods = foodsCollection.find();
+    //   const result = await foods.toArray();
+    //   res.send(result);
+    // });
 
     app.get("/foodsAll", async (req, res) => {
       const foodsAll = allFoodsCollection.find();
@@ -203,15 +203,19 @@ async function run() {
       const foodData = await allFoodsCollection.findOne(filter);
       console.log("foodData", foodData);
       const availableQuantity = parseInt(foodData.quantity);
+      const count = parseInt(foodData.count);
       const currentQuantity = parseInt(food[1]);
+      const updateCount = count + 1;
+      
 
       const quantityUpdate = availableQuantity - currentQuantity;
       const quantityUpdateStr = quantityUpdate.toString();
-      console.log(availableQuantity, currentQuantity, quantityUpdate);
+     
 
       const updateDoc = {
         $set: {
           quantity: quantityUpdateStr,
+          count: updateCount,
         },
       };
       const result = await allFoodsCollection.updateOne(filter, updateDoc);
