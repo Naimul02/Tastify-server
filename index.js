@@ -210,7 +210,7 @@ async function run() {
 
       const quantityUpdate = availableQuantity - currentQuantity;
       const quantityUpdateStr = quantityUpdate.toString();
-     
+    //  update doc
 
       const updateDoc = {
         $set: {
