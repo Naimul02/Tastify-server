@@ -10,7 +10,10 @@ require("dotenv").config();
 //middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://assignment-11-client-de6fb.web.app",
+    ],
     credentials: true,
   })
 );
@@ -44,10 +47,16 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+
+const cookieOption =  {
+  httpOnly: true,
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  secure: process.env.NODE_ENV === "production" ? true : false,
+}
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const foodsCollection = client.db("assignment-11").collection("foods");
     const allFoodsCollection = client
@@ -175,11 +184,7 @@ async function run() {
         expiresIn: "1hr",
       });
       res
-        .cookie("token", token, {
-          httpOnly: true,
-          sameSite: "none",
-          secure: true,
-        })
+        .cookie("token", token, cookieOption)
         .send({ success: true });
     });
 
@@ -228,10 +233,10 @@ async function run() {
     });
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
